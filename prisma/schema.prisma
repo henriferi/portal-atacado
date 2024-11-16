@@ -20,3 +20,13 @@ model Usuario {
   senha String
   tipo  String @default("usuario") 
 }
+
+
+model Fornecedor {
+  id                     Int      @id @default(autoincrement())
+  nome                   String
+  formaPagamento         String
+  entregaBrasil          Boolean
+  whatsappLink           String
+  instagramLink          String
+}
