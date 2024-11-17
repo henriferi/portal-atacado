@@ -1,6 +1,6 @@
 // /api/fornecedores/route.js
 
-import { prisma } from "@/lib/prisma";  // Ajuste conforme a configuração do prisma
+import prisma from '../../../lib/prisma';
 
 export async function GET() {
   const fornecedores = await prisma.fornecedor.findMany();

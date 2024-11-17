@@ -1,6 +1,7 @@
 'use client'
 
-import { useState, useEffect } from "react";
+import { useRouter } from 'next/navigation'; 
+import { useState, useEffect } from 'react';
 
 // Funções para interagir com a API
 export async function getFornecedores() {
@@ -59,6 +60,9 @@ export default function Fornecedores() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
+  const [isClient, setIsClient] = useState(false); // Estado para verificar se é no cliente
+  const router = useRouter(); // Usado para redirecionar
+
   // Função para carregar os fornecedores
   const loadFornecedores = async () => {
     setLoading(true);
@@ -74,6 +78,7 @@ export default function Fornecedores() {
 
   // Carregar fornecedores ao montar o componente
   useEffect(() => {
+    setIsClient(true); // Setar o estado para indicar que está no lado do cliente
     loadFornecedores();
   }, []);
 
@@ -137,6 +142,10 @@ export default function Fornecedores() {
       instagramLink: fornecedor.instagramLink,
     });
   };
+
+  if (!isClient) {
+    return null; // Retorna nada enquanto não estiver no cliente
+  }
 
   return (
     <div className="p-4">
@@ -204,26 +213,32 @@ export default function Fornecedores() {
       </form>
 
       {/* Lista de fornecedores */}
-      <ul className="list-none p-0">
+      <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-0">
         {fornecedores.map((fornecedor) => (
-          <li key={fornecedor.id} className="flex justify-between items-center p-2 border-b">
+          <li key={fornecedor.id} className="border border-gray-500 p-4 rounded-md shadow-md bg-white">
             <div>
-              <p className="font-semibold">{fornecedor.nome}</p>
-              <p>{fornecedor.formaPagamento}</p>
-            </div>
-            <div>
-              <button
-                onClick={() => handleEdit(fornecedor)}
-                className="bg-yellow-500 text-white px-4 py-1 rounded mr-2"
-              >
-                Alterar
-              </button>
-              <button
-                onClick={() => handleDelete(fornecedor.id)}
-                className="bg-red-500 text-white px-4 py-1 rounded"
-              >
-                Excluir
-              </button>
+              <p className="font-semibold">ID: {fornecedor.id}</p>
+              <p className="font-semibold">Nome: {fornecedor.nome}</p>
+              <p className="font-semibold">Forma de pagamento: {fornecedor.formaPagamento}</p>
+              <p className="font-semibold">
+                Entrega para o Brasil: {fornecedor.entregaBrasil ? "Sim" : "Não"}
+              </p>
+              <p className="font-semibold">WhatsApp: {fornecedor.whatsappLink}</p>
+              <p className="font-semibold">Instagram: {fornecedor.instagramLink}</p>
+              <div className="mt-4 space-x-2">
+                <button
+                  onClick={() => handleEdit(fornecedor)}
+                  className="bg-blue-500 text-white px-4 py-1 rounded"
+                >
+                  Editar
+                </button>
+                <button
+                  onClick={() => handleDelete(fornecedor.id)}
+                  className="bg-red-500 text-white px-4 py-1 rounded"
+                >
+                  Excluir
+                </button>
+              </div>
             </div>
           </li>
         ))}

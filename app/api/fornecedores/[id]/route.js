@@ -1,6 +1,5 @@
-// /api/fornecedores/[id]/route.js
 
-import { prisma } from "@/lib/prisma";  // Ajuste conforme a configuração do prisma
+import prisma from '@/lib/prisma';
 
 export async function GET({ params }) {
   const { id } = params;
